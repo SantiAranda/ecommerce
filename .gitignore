@@ -1,5 +1,6 @@
 # dependencias
 node_modules/
+generated/
 
 # variables de entorno
 backend/.env
