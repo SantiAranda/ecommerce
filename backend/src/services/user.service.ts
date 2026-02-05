@@ -34,19 +34,21 @@ export class UserService {
     const user = await prisma.user.findUnique({
       where: { email },
     });
-    
+
     if (!user) {
       throw new BadRequestError("Invalid email or password");
     }
-    
+
     const isPasswordValid = await bcrypt.compare(password, user.password);
-    
+
     if (!isPasswordValid) {
       throw new BadRequestError("Invalid email or password");
     }
-    
-    const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: "1h" });
-    
+
+    const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, {
+      expiresIn: "1h",
+    });
+
     return token;
   }
 }

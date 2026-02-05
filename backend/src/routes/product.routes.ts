@@ -1,6 +1,8 @@
 import { Router } from "express";
 import { ProductController } from "../controllers/product.controller";
 import { ProductService } from "../services/product.service";
+import { authMiddleware } from "../middlewares/auth.middleware";
+import { validate } from "../middlewares/validation.middleware";
 
 const router = Router();
 const productService = new ProductService();
