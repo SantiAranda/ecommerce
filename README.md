@@ -33,8 +33,8 @@ El proyecto sigue un **Patrón de Capas** para asegurar la separación de respon
 
 1. **Clonar el repositorio:**
    ```bash
-   git clone <url-del-repositorio>
-   cd e-commerce
+   git clone https://github.com/SantiAranda/ecommerce.git
+   cd ecommerce
    ```
 
 2. **Configurar el Backend:**
