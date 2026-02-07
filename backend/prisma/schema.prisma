@@ -26,7 +26,7 @@ model User {
   id        String   @id @default(uuid())
   email     String   @unique
   password  String
-  name      String?
+  name      String
   role      Role     @default(USER)
   orders    Order[]
   createdAt DateTime @default(now())
@@ -48,7 +48,7 @@ model Category {
 model Product {
   id          String      @id @default(uuid())
   name        String
-  description String?
+  description String
   price       Decimal     @db.Decimal(10, 2)
   stock       Int         @default(0)
   categoryId  String

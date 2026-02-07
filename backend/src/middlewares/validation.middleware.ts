@@ -6,9 +6,9 @@ export const validate =
   (req: Request, res: Response, next: NextFunction) => {
     try {
       schema.parse({
-        body: req.body,
         params: req.params,
         query: req.query,
+        body: req.body,
       });
       next();
     } catch (error: any) {

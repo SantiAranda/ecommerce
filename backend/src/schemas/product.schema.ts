@@ -15,7 +15,7 @@ import { z } from "zod";
 //   @@map("products")
 // }
 
-const idSchema = z.string();
+const idSchema = z.string().regex(/^\d+$/, "ID must be a number string");
 
 const nameSchema = z
   .string("Name is required")
@@ -24,8 +24,7 @@ const nameSchema = z
 
 const descriptionSchema = z
   .string()
-  .max(1000, "Description must be at most 1000 characters long")
-  .optional();
+  .max(1000, "Description must be at most 1000 characters long");
 
 const priceSchema = z
   .number("Price must be a number")
@@ -55,7 +54,9 @@ export const createProductSchema = z.object({
 });
 
 export const updateProductSchema = z.object({
-  params: idSchema,
+  params: z.object({
+    id: idSchema,
+  }),
   body: z
     .object({
       name: nameSchema,
@@ -71,14 +72,16 @@ export const updateProductSchema = z.object({
 });
 
 export const getProductSchema = z.object({
-  params: idSchema,
+  params: z.object({
+    id: idSchema,
+  }),
 });
 
 export const deleteProductSchema = z.object({
-  params: idSchema,
+  params: z.object({
+    id: idSchema,
+  }),
 });
 
 export type CreateProductInput = z.infer<typeof createProductSchema>["body"];
 export type UpdateProductInput = z.infer<typeof updateProductSchema>["body"];
-export type GetProductInput = z.infer<typeof getProductSchema>["params"];
-export type DeleteProductInput = z.infer<typeof deleteProductSchema>["params"];
