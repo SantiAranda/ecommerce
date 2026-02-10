@@ -26,28 +26,28 @@ const totalSchema = z
 
 const statusSchema = z.enum(["PENDING", "SHIPPED", "DELIVERED", "CANCELLED"]);
 
-export const createOrderSchema = z.object({
-  body: z.object(
-    {
-      userId: userIdSchema,
-      total: totalSchema,
-      status: statusSchema,
-    },
-    "Invalid order data",
-  ),
+const cartItemShcema = z.object({
+  productId: z.string("Product ID is required"),
+  quantity: z
+    .number("Quantity must be a number")
+    .int("Quantity must be an integer")
+    .min(1, "Quantity must be at least 1"),
+});
+
+export const createOrderWithItemsSchema = z.object({
+  body: z.object({
+    status: statusSchema.optional(),
+    cartItems: z
+      .array(cartItemShcema)
+      .min(1, "At least one cart item is required"),
+  }),
 });
 
 export const updateOrderSchema = z.object({
   params: idSchema,
-  body: z
-    .object({
-      total: totalSchema,
-      status: statusSchema,
-    })
-    .partial()
-    .refine((data) => Object.keys(data).length > 0, {
-      message: "At least one field must be provided for update",
-    }),
+  body: z.object({
+    status: statusSchema,
+  }),
 });
 
 export const getOrderSchema = z.object({
@@ -58,7 +58,7 @@ export const deleteOrderSchema = z.object({
   params: idSchema,
 });
 
-export type CreateOrderInput = z.infer<typeof createOrderSchema>["body"];
+export type CreateOrderWithItemsInput = z.infer<typeof createOrderWithItemsSchema>["body"];
 export type UpdateOrderInput = z.infer<typeof updateOrderSchema>["body"];
 export type GetOrderInput = z.infer<typeof getOrderSchema>["params"];
 export type DeleteOrderInput = z.infer<typeof deleteOrderSchema>["params"];

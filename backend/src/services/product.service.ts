@@ -38,6 +38,7 @@ export class ProductService {
 
   async create(data: CreateProductInput) {
     const { name, price, stock, categoryId, description } = data;
+    
     const product = await prisma.product.create({
       data: {
         name,
@@ -57,7 +58,9 @@ export class ProductService {
 
   async update(id: string, data: UpdateProductInput) {
     const { name, description, price, stock, categoryId } = data;
-
+    
+    await this.getById(id);
+    
     if (categoryId !== undefined) {
       const categoryExists = await prisma.category.findUnique({
         where: { id: categoryId },
@@ -74,27 +77,19 @@ export class ProductService {
     if (stock !== undefined) updateData.stock = stock;
     if (categoryId !== undefined) updateData.categoryId = categoryId;
 
-    const result = await prisma.product.updateMany({
+    const result = await prisma.product.update({
       where: { id },
       data: updateData,
     });
-
-    if (result.count === 0) {
-      throw new NotFoundError("Product not found");
-    }
 
     return result;
   }
 
   async delete(id: string) {
-    const result = await prisma.product.deleteMany({
+    await this.getById(id);
+    
+    return await prisma.product.delete({
       where: { id },
     });
-
-    if (result.count === 0) {
-      throw new NotFoundError("Product not found");
-    }
-
-    return result;
   }
 }
